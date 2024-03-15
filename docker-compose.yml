@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+
+# pg_server service
+###########################################
+  pg_server:
+    image: postgres
+
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 15s
+      timeout: 15s
+      retries: 2
+      start_period: 15s
+
+# demo app service
+########################################### 
+  demo_service:
+    build: .
+
+    volumes:
+      - static:/app/static
+
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: pg_server
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://127.0.0.1:8000/admin || exit 1"]
+      interval: 15s
+      timeout: 15s
+      retries: 2
+      start_period: 15s
+
+    depends_on:
+      pg_server:
+        condition: service_healthy
+
+# nginx service
+###########################################
+  nginx_server:
+    build: ./nginx
+
+    volumes:
+      - static:/static
+
+    ports:
+      - 80:80
+
+    depends_on:
+      demo_service:
+        condition: service_healthy
+ ###########################################
+
+# volume for static content
+volumes:
+  static:
