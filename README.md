@@ -18,7 +18,7 @@ docker compose up
 - Postgres - работает на стандатрном порту 5432
 - Django - работает на порту 8000
 - Nginx - проксирует порт 8000 на порт 80
-- 
+ 
 Для проверки работоспособности требуется перейти по ссылке http://localhost/admin
 Для авторизации в http://localhost  испозуются следующая учётная запись:
 ~~~ python
@@ -35,10 +35,11 @@ SUPERUSER_PASSWORD: lksajglhasd2
 # GitHub CI
 Для выполнения GitHub CI в корне проекта создана директория с файлом main.yaml .github/workflows/main.yaml
 создана одна задача включающая в себя следующие пункты:
-  - name: install Docker Compose (запускает только контейнер Django и контейнер Postgres для успешного выполнения шага тестирования)
-  - name: run tests
-  - name: Login to DockerHub
-  - name: Build and push
+  - `name: install Docker Compose` (запускает только контейнер Django и контейнер Postgres для успешного выполнения шага тестирования)
+  - `name: run tests`
+  - `name: Login to DockerHub`
+  - `name: Build and push`
+
 
 ============================================================================================
 
